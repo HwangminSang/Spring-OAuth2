@@ -21,7 +21,8 @@ public class OAuth2ResourceServer {
                 (requests) -> requests
                         .antMatchers("/photos","/remotePhotos","/myInfo").access("hasAuthority('SCOPE_photo')")
                         .anyRequest().authenticated());
-//        http.oauth2ResourceServer().jwt();
+        // 토큰 검증이 필요없는경우 해당 것을 주석처리.
+        http.oauth2ResourceServer().jwt();
         http.cors().configurationSource(corsConfigurationSource());
         return http.build();
     }

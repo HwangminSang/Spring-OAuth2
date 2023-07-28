@@ -18,9 +18,11 @@ public class OAuth2ClientConfig {
 
     @Bean
     SecurityFilterChain oauth2SecurityFilterChain(HttpSecurity http) throws Exception {
-        http.authorizeRequests((requests) -> requests.antMatchers("/","/photos").permitAll().anyRequest().authenticated());
-        http.oauth2Login(authLogin -> authLogin.defaultSuccessUrl("/"));
-        http.oauth2Client();
+        http.authorizeRequests((requests) -> requests.antMatchers("/","/photos").permitAll()
+                .anyRequest().authenticated());
+        // JWK-SET 요청하여 토큰 검증
+        http.oauth2Login(authLogin -> authLogin.defaultSuccessUrl("/"));  //  인증 인가 를 다 함
+        http.oauth2Client(); // 인가만 받고 인증은 따로
         return http.build();
    }
 
@@ -29,10 +31,18 @@ public class OAuth2ClientConfig {
        return new RestTemplate();
    }
 
+
+    /**
+     *  client가 인가. 받고록   기존 accessToken 만료시 refreshToken을 가지고 서버쪽.
+     * @param clientRegistrationRepository
+     * @param authorizedClientRepository
+     * @return
+     */
     @Bean
     public DefaultOAuth2AuthorizedClientManager authorizedClientManager(ClientRegistrationRepository clientRegistrationRepository,
                                                                  OAuth2AuthorizedClientRepository authorizedClientRepository) {
 
+        //
         OAuth2AuthorizedClientProvider authorizedClientProvider =
                 OAuth2AuthorizedClientProviderBuilder.builder()
                         .authorizationCode()
@@ -41,9 +51,7 @@ public class OAuth2ClientConfig {
                         .refreshToken()
                         .build();
 
-        DefaultOAuth2AuthorizedClientManager authorizedClientManager =
-                new DefaultOAuth2AuthorizedClientManager(
-                        clientRegistrationRepository, authorizedClientRepository);
+        DefaultOAuth2AuthorizedClientManager authorizedClientManager = new DefaultOAuth2AuthorizedClientManager(clientRegistrationRepository, authorizedClientRepository);
         authorizedClientManager.setAuthorizedClientProvider(authorizedClientProvider);
 
         return authorizedClientManager;

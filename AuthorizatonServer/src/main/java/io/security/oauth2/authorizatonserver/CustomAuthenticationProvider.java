@@ -18,15 +18,16 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private final RegisteredClientRepository registeredClientRepository;
-    private final OAuth2AuthorizationService oAuth2AuthorizationService;
-    private final OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService;
+    private final RegisteredClientRepository registeredClientRepository;  // 등록된 클라이언트 저장소
+    private final OAuth2AuthorizationService oAuth2AuthorizationService;  // 해당 클라이언트의 정보를 찾아오는 서비스
+    private final OAuth2AuthorizationConsentService oAuth2AuthorizationConsentService;  // 동의 페이지
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {
 
         OAuth2AuthorizationCodeRequestAuthenticationToken authorizationCodeRequestAuthentication =
                 (OAuth2AuthorizationCodeRequestAuthenticationToken) authentication;
 
+        //  authorization-grant-type: authorization_code 방식으로 하기때문에 검증 담당 .
         OAuth2AuthorizationCodeRequestAuthenticationProvider authenticationProvider
                 = new OAuth2AuthorizationCodeRequestAuthenticationProvider(registeredClientRepository, oAuth2AuthorizationService, oAuth2AuthorizationConsentService);
         OAuth2AuthorizationCodeRequestAuthenticationToken authenticate 

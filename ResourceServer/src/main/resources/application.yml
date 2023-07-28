@@ -5,5 +5,6 @@ spring:
   security:
     oauth2:
       resourceserver:
+        # 토큰 검증
         jwt:
           jwk-set-uri: http://localhost:9000/oauth2/jwks

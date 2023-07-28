@@ -17,6 +17,8 @@ public class DefaultSecurityConfig {
 	@Bean
 	public SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception {
 
+
+		// 카카오 로그인시 페이지 띄어주는 부분과 같다.
 		http.authorizeRequests(request -> request.anyRequest().authenticated());
 		http.formLogin();
 		DaoAuthenticationProvider daoAuthenticationProvider = new DaoAuthenticationProvider();

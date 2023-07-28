@@ -17,8 +17,11 @@ public class AuthorizationServerConfig {
     @Bean
     @Order(Ordered.HIGHEST_PRECEDENCE)
     public SecurityFilterChain authorizationServerSecurityFilterChain(HttpSecurity http) throws Exception {
+        // 인가서버 설정을 위해
         OAuth2AuthorizationServerConfigurer<HttpSecurity> authorizationServerConfigurer =
                 new OAuth2AuthorizationServerConfigurer<>();
+
+        // 엔드포인트 정보.
         RequestMatcher endpointsMatcher = authorizationServerConfigurer.getEndpointsMatcher();
 
         http
@@ -27,7 +30,9 @@ public class AuthorizationServerConfig {
                         authorizeRequests.anyRequest().authenticated()
                 )
                 .csrf(csrf -> csrf.ignoringRequestMatchers(endpointsMatcher))
+                // 인가서버 설정을 자동으로
                 .apply(authorizationServerConfigurer);
+        // 로그인 페이지 클라이언트에게 랜더링
         http
                 .exceptionHandling(exceptions ->
                         exceptions.authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))

@@ -5,12 +5,13 @@ spring:
     oauth2:
       client:
         provider:
+          # 인가서버 기동이 필요
           springOAuth2:
-            authorization-uri: http://localhost:9000/oauth2/authorize
             issuer-uri: http://localhost:9000
-            jwk-set-uri: http://localhost:9000/oauth2/jwks
-            token-uri: http://localhost:9000/oauth2/token
-            user-info-uri: http://localhost:9000/userinfo
+            authorization-uri: http://localhost:9000/oauth2/authorize  # 임시코드  code 발급
+            jwk-set-uri: http://localhost:9000/oauth2/jwks  # 토큰 검증시 공개키
+            token-uri: http://localhost:9000/oauth2/token # 토큰
+            user-info-uri: http://localhost:9000/userinfo # 사용자정보
             #user-name-attribute: preferred_username
         registration:
           springOAuth2:
